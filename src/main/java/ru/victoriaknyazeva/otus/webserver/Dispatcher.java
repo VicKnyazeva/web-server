@@ -2,8 +2,8 @@ package ru.victoriaknyazeva.otus.webserver;
 
 import ru.victoriaknyazeva.otus.webserver.processors.CalculatorRequestProcessor;
 import ru.victoriaknyazeva.otus.webserver.processors.HelloWorldRequestProcessor;
+import ru.victoriaknyazeva.otus.webserver.processors.NotFoundRequestProcessor;
 import ru.victoriaknyazeva.otus.webserver.processors.RequestProcessor;
-import ru.victoriaknyazeva.otus.webserver.processors.UnknownOperationRequestProcessor;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,14 +18,15 @@ public class Dispatcher {
         this.router = new HashMap<>();
         this.router.put("/calc", new CalculatorRequestProcessor());
         this.router.put("/hello", new HelloWorldRequestProcessor());
-        this.unknownOperationRequestProcessor = new UnknownOperationRequestProcessor();
+        this.unknownOperationRequestProcessor = new NotFoundRequestProcessor();
     }
 
-    public void execute(HttpRequest httpRequest, OutputStream outputStream) throws IOException {
+    public void execute(HttpRequest httpRequest, OutputStream outputStream) throws InterruptedException, IOException {
         if (!router.containsKey(httpRequest.getUri())) {
             unknownOperationRequestProcessor.execute(httpRequest, outputStream);
             return;
         }
-        router.get(httpRequest.getUri()).execute(httpRequest, outputStream);
+        var processor = router.get(httpRequest.getUri());
+        processor.execute(httpRequest, outputStream);
     }
 }
