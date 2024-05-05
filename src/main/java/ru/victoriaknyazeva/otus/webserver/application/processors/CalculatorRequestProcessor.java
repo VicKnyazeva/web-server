@@ -14,7 +14,7 @@ public class CalculatorRequestProcessor implements RequestProcessor {
         int result = a + b;
         String outMessage = a + " + " + b + " = " + result;
 
-        String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><body><h1>" + outMessage + "</h1></body></html>";
+        String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<html><body><h1>" + outMessage + "</h1></body></html>";
         output.write(response.getBytes(StandardCharsets.UTF_8));
     }
 }

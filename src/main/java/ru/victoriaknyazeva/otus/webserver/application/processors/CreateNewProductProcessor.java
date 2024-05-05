@@ -8,7 +8,6 @@ import ru.victoriaknyazeva.otus.webserver.application.Storage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 public class CreateNewProductProcessor implements RequestProcessor {
     @Override
@@ -18,7 +17,7 @@ public class CreateNewProductProcessor implements RequestProcessor {
         Storage.save(item);
         String jsonOutItem = gson.toJson(item);
 
-        String response = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n" + jsonOutItem;
+        String response = "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\n\r\n" + jsonOutItem;
         output.write(response.getBytes(StandardCharsets.UTF_8));
     }
 }

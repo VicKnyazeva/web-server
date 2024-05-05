@@ -15,7 +15,7 @@ public class GetAllProductsProcessor implements RequestProcessor {
     public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
         List<Item> items = Storage.getItems();
         Gson gson = new Gson();
-        String result = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n" + gson.toJson(items);
+        String result = "HTTP/1.1 200 OK\r\nContent-Type: application/json; charset=utf-8\r\n\r\n" + gson.toJson(items);
         output.write(result.getBytes(StandardCharsets.UTF_8));
     }
 }
