@@ -1,5 +1,7 @@
 package ru.victoriaknyazeva.otus.webserver;
 
+import ru.victoriaknyazeva.otus.webserver.application.Storage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -44,6 +46,7 @@ public class HttpServer {
 
     private void run() {
         try {
+            Storage.init();
             this.serverSocket = new ServerSocket(port);
 
             System.out.println("Сервер запущен на порту: " + port);
@@ -93,7 +96,9 @@ public class HttpServer {
                  var out = socket.getOutputStream();
                  var in = socket.getInputStream()) {
                 HttpRequest request = parseRequest(in);
-                dispatcher.execute(request, out);
+                if (request != null) {
+                    dispatcher.execute(request, out);
+                }
             } catch (InterruptedException e) {
                 if (serverStopInProgress)
                     return;
@@ -107,9 +112,12 @@ public class HttpServer {
     private static HttpRequest parseRequest(InputStream in) throws IOException {
         byte[] buffer = new byte[8192];
         int n = in.read(buffer);
-        String rawRequest = new String(buffer, 0, n);
-        HttpRequest request = new HttpRequest(rawRequest);
-        request.info(true);
-        return request;
+        if (n > 0) {
+            String rawRequest = new String(buffer, 0, n);
+            HttpRequest request = new HttpRequest(rawRequest);
+            request.info(true);
+            return request;
+        }
+        return null;
     }
 }
