@@ -1,5 +1,7 @@
 package ru.victoriaknyazeva.otus.webserver;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.victoriaknyazeva.otus.webserver.application.Storage;
 
 import java.io.IOException;
@@ -10,6 +12,8 @@ import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 
 public class HttpServer {
+    private static final Logger logger = LogManager.getLogger(HttpServer.class.getName());
+
     private final int port;
     private final ExecutorService executorService;
 
@@ -49,9 +53,12 @@ public class HttpServer {
             Storage.init();
             this.serverSocket = new ServerSocket(port);
 
-            System.out.println("Сервер запущен на порту: " + port);
+            String msg = "Сервер запущен на порту: " + port;
+            logger.info(msg);
+            System.out.println(msg);
+
             this.dispatcher = new Dispatcher();
-            System.out.println("Диспетчер проинициализирован");
+            logger.info("Диспетчер проинициализирован");
 
             while (!serverSocket.isClosed()) {
                 Socket socket = accept();
@@ -59,7 +66,7 @@ public class HttpServer {
                     enqueueTaskForRequest(socket);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.fatal("Исключение", e);
         } finally {
             serverStopInProgress = false;
         }
@@ -74,7 +81,7 @@ public class HttpServer {
                 serverStopInProgress = true;
                 serverSocket.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("stop: ", e);
             }
         }
     }
@@ -97,14 +104,19 @@ public class HttpServer {
                  var in = socket.getInputStream()) {
                 HttpRequest request = parseRequest(in);
                 if (request != null) {
-                    dispatcher.execute(request, out);
+                    logger.info("Start request ({}) processing", request.getUri());
+                    try {
+                        dispatcher.execute(request, out);
+                    } finally {
+                        logger.info("End request ({}) processing", request.getUri());
+                    }
                 }
             } catch (InterruptedException e) {
                 if (serverStopInProgress)
                     return;
-                e.printStackTrace();
+                logger.error("enqueueTaskForRequest: ", e);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("enqueueTaskForRequest: ", e);
             }
         });
     }
@@ -115,7 +127,7 @@ public class HttpServer {
         if (n > 0) {
             String rawRequest = new String(buffer, 0, n);
             HttpRequest request = new HttpRequest(rawRequest);
-            request.info(true);
+            logger.debug(request.info(true));
             return request;
         }
         return null;
