@@ -1,4 +1,4 @@
-package ru.victoriaknyazeva.otus.webserver.processors;
+package ru.victoriaknyazeva.otus.webserver.application.processors;
 
 import ru.victoriaknyazeva.otus.webserver.HttpRequest;
 

@@ -1,13 +1,20 @@
 package ru.victoriaknyazeva.otus.webserver;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HttpRequest {
     private String rawRequest;
     private String uri;
     private HttpMethod method;
     private Map<String, String> parameters;
+    private String body;
+
+    public String getRouteKey() {
+        return String.format("%s %s", method, uri);
+    }
 
     public String getUri() {
         return uri;
@@ -17,10 +24,43 @@ public class HttpRequest {
         return parameters.get(key);
     }
 
+    public String getBody() {
+        return body;
+    }
+
     public HttpRequest(String rawRequest) {
         this.rawRequest = rawRequest;
         this.parseRequestLine();
+        this.tryToParseBody();
     }
+
+    public void tryToParseBody() {
+        if (method == HttpMethod.POST) {
+            List<String> lines = rawRequest.lines().collect(Collectors.toList());
+            int splitLine = -1;
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).isEmpty()) {
+                    splitLine = i;
+                    break;
+                }
+            }
+            if (splitLine > -1) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = splitLine + 1; i < lines.size(); i++) {
+                    stringBuilder.append(lines.get(i));
+                }
+                this.body = stringBuilder.toString();
+            }
+        }
+    }
+
+    // POST /products HTTP/1.1
+    // Content-Type: application/json
+    //
+    // {
+    //   "title": "a",
+    //   "price": 100
+    // }
 
     public void parseRequestLine() {
         int startIndex = rawRequest.indexOf(' ');
@@ -46,5 +86,6 @@ public class HttpRequest {
         System.out.println("URI: " + uri);
         System.out.println("HTTP-method: " + method);
         System.out.println("Parameters: " + parameters);
+        System.out.println("Body: " + body);
     }
 }
