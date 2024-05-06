@@ -1,9 +1,6 @@
 package ru.victoriaknyazeva.otus.webserver;
 
-import ru.victoriaknyazeva.otus.webserver.processors.CalculatorRequestProcessor;
-import ru.victoriaknyazeva.otus.webserver.processors.HelloWorldRequestProcessor;
-import ru.victoriaknyazeva.otus.webserver.processors.RequestProcessor;
-import ru.victoriaknyazeva.otus.webserver.processors.UnknownOperationRequestProcessor;
+import ru.victoriaknyazeva.otus.webserver.application.processors.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
