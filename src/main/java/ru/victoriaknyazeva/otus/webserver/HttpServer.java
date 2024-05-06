@@ -27,22 +27,26 @@ public class HttpServer {
             Storage.init();
             while (true) {
                 Socket socket = serverSocket.accept();
-                executorService.execute(() -> {
-                    try (Socket ignored = socket;
-                         OutputStream out = socket.getOutputStream();
-                         InputStream in = socket.getInputStream()) {
-                        HttpRequest request = getRequest(in);
-                        if (request != null) {
-                            dispatcher.execute(request, out);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                enqueueTaskForRequest(socket, dispatcher);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void enqueueTaskForRequest(Socket socket, Dispatcher dispatcher) {
+        executorService.execute(() -> {
+            try (Socket ignored = socket;
+                 OutputStream out = socket.getOutputStream();
+                 InputStream in = socket.getInputStream()) {
+                HttpRequest request = getRequest(in);
+                if (request != null) {
+                    dispatcher.execute(request, out);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private HttpRequest getRequest(InputStream in) throws IOException {
