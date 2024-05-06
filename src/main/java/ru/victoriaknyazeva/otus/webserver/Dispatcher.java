@@ -17,7 +17,7 @@ public class Dispatcher {
         this.router.put("GET /hello", new HelloWorldRequestProcessor());
         this.router.put("GET /items", new GetAllProductsProcessor());
         this.router.put("POST /items", new CreateNewProductProcessor());
-        this.unknownOperationRequestProcessor = new UnknownOperationRequestProcessor();
+        this.unknownOperationRequestProcessor = new NotFoundRequestProcessor();
     }
 
     public void execute(HttpRequest httpRequest, OutputStream outputStream) throws IOException {
