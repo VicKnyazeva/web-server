@@ -35,32 +35,25 @@ public class HttpRequest {
     }
 
     public void tryToParseBody() {
-        if (method == HttpMethod.POST) {
-            List<String> lines = rawRequest.lines().collect(Collectors.toList());
-            int splitLine = -1;
-            for (int i = 0; i < lines.size(); i++) {
-                if (lines.get(i).isEmpty()) {
-                    splitLine = i;
-                    break;
-                }
-            }
-            if (splitLine > -1) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int i = splitLine + 1; i < lines.size(); i++) {
-                    stringBuilder.append(lines.get(i));
-                }
-                this.body = stringBuilder.toString();
+        if (method == HttpMethod.GET) {
+            return;
+        }
+        List<String> lines = rawRequest.lines().collect(Collectors.toList());
+        int splitLine = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).isEmpty()) {
+                splitLine = i;
+                break;
             }
         }
+        if (splitLine > -1) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = splitLine + 1; i < lines.size(); i++) {
+                stringBuilder.append(lines.get(i));
+            }
+            this.body = stringBuilder.toString();
+        }
     }
-
-    // POST /products HTTP/1.1
-    // Content-Type: application/json
-    //
-    // {
-    //   "title": "a",
-    //   "price": 100
-    // }
 
     public void parseRequestLine() {
         int startIndex = rawRequest.indexOf(' ');
