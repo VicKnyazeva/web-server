@@ -1,15 +1,18 @@
 package ru.victoriaknyazeva.otus.webserver.application;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class Storage {
+    private static final Logger logger = LogManager.getLogger(Storage.class.getName());
     private static List<Item> items;
 
     public static void init() {
-        System.out.println("Хранилище проинициализировано");
+        logger.debug("Хранилище проинициализировано");
         items = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {

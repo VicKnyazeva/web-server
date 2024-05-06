@@ -72,13 +72,15 @@ public class HttpRequest {
         }
     }
 
-    public void info(boolean showRawRequest) {
+    public String info(boolean showRawRequest) {
+        StringBuilder sb = new StringBuilder();
         if (showRawRequest) {
-            System.out.println(rawRequest);
+            sb.append(rawRequest + "\n");
         }
-        System.out.println("URI: " + uri);
-        System.out.println("HTTP-method: " + method);
-        System.out.println("Parameters: " + parameters);
-        System.out.println("Body: " + body);
+        sb.append("URI: " + uri + "\n");
+        sb.append("HTTP-method: " + method + "\n");
+        sb.append("Parameters: " + parameters + "\n");
+        sb.append("Body: " + body + "\n");
+        return sb.toString();
     }
 }
