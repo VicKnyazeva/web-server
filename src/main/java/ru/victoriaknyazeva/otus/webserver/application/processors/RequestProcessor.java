@@ -1,10 +1,8 @@
 package ru.victoriaknyazeva.otus.webserver.application.processors;
 
 import ru.victoriaknyazeva.otus.webserver.HttpRequest;
-
-import java.io.IOException;
-import java.io.OutputStream;
+import ru.victoriaknyazeva.otus.webserver.HttpResponse;
 
 public interface RequestProcessor {
-    void execute(HttpRequest httpRequest, OutputStream output) throws IOException;
+    void execute(HttpRequest httpRequest, HttpResponse response) throws Exception;
 }

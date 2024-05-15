@@ -1,6 +1,7 @@
 .idea/
 target/
 logs/
+static/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

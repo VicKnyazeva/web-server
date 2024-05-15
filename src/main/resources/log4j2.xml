@@ -13,11 +13,11 @@
     </Appenders>
     <Loggers>
         <!-- ALL < Trace < Debug < Info < Warn < Error < Fatal < OFF -->
-        <Root level="debug">
+        <Root level="all">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="FILE"/>
         </Root>
-        <Logger name="ru.victoriaknyazeva.otus.webserver.HttpServer" level="fatal"/>
-        <Logger name="ru.victoriaknyazeva.otus.webserver.Main" level="debug"/>
+        <!--Logger name="ru.victoriaknyazeva.otus.webserver.HttpServer" level="fatal"/>
+        <Logger name="ru.victoriaknyazeva.otus.webserver.Main" level="debug"/-->
     </Loggers>
 </Configuration>
