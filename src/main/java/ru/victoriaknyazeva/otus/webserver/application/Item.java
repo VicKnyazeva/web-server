@@ -1,42 +1,33 @@
 package ru.victoriaknyazeva.otus.webserver.application;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class Item {
-    private UUID id;
-    private String title;
-    private int price;
+public record Item(UUID id,String title,int price){
 
-    public UUID getId() {
-        return id;
-    }
+	public Item(UUID id, String title, int price) {
+		if (id==null) {
+			this.id = UUID.randomUUID();
+		} else {
+			this.id = id;
+		}
+		this.title =title;
+		this.price = price;
+	}
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+	public Item(String title, int price) {
+		this(UUID.randomUUID(), title, price);
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Item item)) return false;
+        return Objects.equals(id, item.id);
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public Item() {
-    }
-
-    public Item(String title, int price) {
-        this.id = UUID.randomUUID();
-        this.title = title;
-        this.price = price;
-    }
-}
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
+};
