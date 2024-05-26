@@ -1,15 +1,12 @@
 package ru.victoriaknyazeva.otus.webserver.application.processors;
 
 import ru.victoriaknyazeva.otus.webserver.HttpRequest;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import ru.victoriaknyazeva.otus.webserver.HttpResponse;
+import ru.victoriaknyazeva.otus.webserver.NotFoundException;
 
 public class NotFoundRequestProcessor implements RequestProcessor {
     @Override
-    public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
-        String response = "HTTP/1.1 404 Not found\r\nContent-Type: text/plane; charset=utf-8\r\n\r\n404. Страница отсутствует";
-        output.write(response.getBytes(StandardCharsets.UTF_8));
+    public void execute(HttpRequest httpRequest, HttpResponse response) throws Exception {
+        throw new NotFoundException("Страница отсутствует");
     }
 }
